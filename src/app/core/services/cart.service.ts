@@ -1,24 +1,44 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { IProduct } from './product.service';
-import { Observable } from 'rxjs';
+import { Injectable, signal, computed } from '@angular/core';
 
-@Injectable({
-  providedIn: 'root'
-})
+export type CartItem = { id:number; title:string; price:number; quantity:number; image:string; color?:string };
+
+@Injectable({ providedIn: 'root' })
 export class CartService {
-  
-  private readonly apiUrl = 'https://fakestoreapi.com/products';
+  cart = signal<CartItem[]>([]);
+  count = computed(() => this.cart().length);
+  subtotal = computed(() => this.cart().reduce((s,i)=>s + i.price * i.quantity, 0));
 
-  constructor(private http: HttpClient) {}
-
-  getProducts(): Observable<IProduct[]> {
-    return this.http.get<IProduct[]>(this.apiUrl);
+  add(item: CartItem) {
+    const existing = this.cart().find(i => i.id === item.id);
+    if (existing) {
+      this.cart.update(arr => arr.map(i => i.id === item.id ? { ...i, quantity: i.quantity + item.quantity } : i));
+    } else {
+      this.cart.update(arr => [...arr, item]);
+    }
   }
 
-  getProduct(id: number): Observable<IProduct> {
-    return this.http.get<IProduct>(`${this.apiUrl}/${id}`);
+  remove(id: number) {
+    this.cart.update(arr => arr.filter(i => i.id !== id));
   }
 
+  clear() { this.cart.set([]); }
 
+
+  updateQty(id: number, qty: number) {
+    this.cart.update(list =>
+      list.map(i => i.id === id ? { ...i, quantity: Math.max(1, qty) } : i)
+    );
+  }
+
+  inc(id: number) {
+    this.cart.update(list =>
+      list.map(i => i.id === id ? { ...i, quantity: i.quantity + 1 } : i)
+    );
+  }
+
+  dec(id: number) {
+    this.cart.update(list =>
+      list.map(i => i.id === id ? { ...i, quantity: Math.max(1, i.quantity - 1) } : i)
+    );
+  }
 }

@@ -1,9 +1,9 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { RouterLink, RouterLinkActive, RouterModule, RouterOutlet } from '@angular/router';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, inject } from '@angular/core';
+import { Router } from 'express';
 
 @Component({
   selector: 'app-auth-navbar',
-  imports: [RouterLink,RouterModule],
+  imports: [],
   templateUrl: './auth-navbar.html',
   styleUrl: './auth-navbar.css',
   schemas: [CUSTOM_ELEMENTS_SCHEMA]

@@ -1,1 +1,67 @@
-<p>footer works!</p>
+<footer class="bg-gray-900 text-gray-300">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <!-- Logo / About -->
+      <div>
+        <a routerLink="/home" class="flex items-center gap-2">
+          <img src="./logos/Logo.png" alt="Logo" class="h-10 w-auto" />
+          <span class="text-lg font-semibold text-white">AngularMart</span>
+        </a>
+        <p class="mt-4 text-sm text-gray-400 leading-relaxed">
+          Your one-stop shop for everything. Powered by Angular ⚡
+        </p>
+      </div>
+
+      <!-- Links -->
+      <div>
+        <h3 class="text-sm font-semibold text-white tracking-wider uppercase">Shop</h3>
+        <ul class="mt-4 space-y-2 text-sm">
+          <li><a routerLink="/categories" class="hover:text-white">Categories</a></li>
+          <li><a routerLink="/all-products" class="hover:text-white">All Products</a></li>
+          <li><a href="#" class="hover:text-white">Deals</a></li>
+          <li><a href="#" class="hover:text-white">New Arrivals</a></li>
+        </ul>
+      </div>
+
+      <!-- Support -->
+      <div>
+        <h3 class="text-sm font-semibold text-white tracking-wider uppercase">Support</h3>
+        <ul class="mt-4 space-y-2 text-sm">
+          <li><a href="#" class="hover:text-white">Help Center</a></li>
+          <li><a href="#" class="hover:text-white">Returns</a></li>
+          <li><a href="#" class="hover:text-white">Shipping Info</a></li>
+          <li><a href="#" class="hover:text-white">Contact Us</a></li>
+        </ul>
+      </div>
+
+      <!-- Newsletter -->
+      <div>
+        <h3 class="text-sm font-semibold text-white tracking-wider uppercase">Stay Updated</h3>
+        <form class="mt-4 flex gap-2">
+          <input
+            type="email"
+            placeholder="Enter your email"
+            class="w-full rounded-md bg-gray-800 px-3 py-2 text-sm text-gray-200
+                   placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          />
+          <button
+            type="submit"
+            class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-medium text-white hover:bg-indigo-700"
+          >
+            Subscribe
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Bottom -->
+    <div class="mt-10 border-t border-gray-800 pt-6 flex flex-col sm:flex-row items-center justify-between">
+      <p class="text-xs text-gray-500">&copy; {{ year }} AngularMart. All rights reserved.</p>
+      <div class="mt-4 sm:mt-0 flex gap-4 text-gray-400">
+        <a href="#" aria-label="Twitter" class="hover:text-white"><i class="fa-brands fa-twitter"></i></a>
+        <a href="#" aria-label="Facebook" class="hover:text-white"><i class="fa-brands fa-facebook"></i></a>
+        <a href="#" aria-label="Instagram" class="hover:text-white"><i class="fa-brands fa-instagram"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>

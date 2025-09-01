@@ -1,0 +1,38 @@
+<div class="container mx-auto px-4 py-8">
+    <div class="mb-6">
+        <h1 class="text-3xl font-bold">Browse Categories</h1>
+        <p class="text-sm text-gray-400 mt-1">Pick a category to explore products.</p>
+    </div>
+
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+    @for (c of categories(); track c.slug) {
+        <a [routerLink]="['/categories', c.slug]"
+        class="group rounded-xl border border-gray-800 bg-white/5 p-4
+                hover:bg-white/10 hover:border-gray-700 transition
+                flex items-center justify-between gap-3 no-underline">
+
+        <div class="flex-1">
+            <h2 class="text-base font-semibold text-white group-hover:text-indigo-300 transition-colors">
+            {{ c.name }}
+            </h2>
+            <p class="text-xs text-gray-400">
+            {{ counts()[c.slug] || 0 }} items
+            </p>
+        </div>
+
+        <div class="text-2xl opacity-90 group-hover:opacity-100 transition">
+            @let k = (c.slug || '').toLowerCase();
+            @switch (true) {
+            @case (k.includes('phone') || k.includes('laptop') || k.includes('pc')) { 📱 }
+            @case (k.includes('dress') || k.includes('shirt') || k.includes('top')) { 👗 }
+            @case (k.includes('fragrance') || k.includes('perfume')) { 🌸 }
+            @case (k.includes('skin')) { 🧴 }
+            @case (k.includes('grocery')) { 🛒 }
+            @case (k.includes('home') || k.includes('furniture') || k.includes('decor')) { 🛋️ }
+            @default { 🛍️ }
+            }
+        </div>
+        </a>
+    }
+    </div>
+</div>

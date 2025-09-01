@@ -1,0 +1,93 @@
+<div class="container mx-auto px-4 py-8">
+
+  <!-- HERO -->
+  <section class="mb-10 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 p-8 text-white shadow-lg">
+    <div class="flex flex-col sm:flex-row items-center gap-6">
+      <div class="flex-1">
+        <h1 class="text-3xl sm:text-4xl font-bold">Welcome to AngularMart</h1>
+        <p class="mt-2 text-white/90 text-lg">Shop smarter with the best deals, curated just for you.</p>
+        <div class="mt-4">
+          <a routerLink="/all-products"
+            class="inline-flex items-center rounded-md px-5 py-2 text-sm font-medium 
+                  bg-gray-900 text-gray-100 shadow-sm 
+                  hover:bg-gray-800 hover:shadow-md active:scale-95 
+                  transition-all duration-200">
+            Shop All Products →
+          </a>
+        </div>
+      </div>
+      <img src="./logos/Logo.png" alt="AngularMart Logo" class="h-28 sm:h-36 opacity-90 drop-shadow-lg">
+    </div>
+  </section>
+
+  <!-- STATUS -->
+  @if (isLoading()) {
+    <p class="text-gray-500">Loading…</p>
+  } @else if (error()) {
+    <p class="text-red-500 font-medium">{{ error() }}</p>
+  } @else {
+
+    <!-- FEATURED CATEGORIES -->
+    @for (cat of featured(); track cat) {
+      <section class="mb-12">
+        <div class="mb-4 flex items-center justify-between">
+          <h2 class="text-2xl font-semibold capitalize">{{ cat.replace('-', ' ') }}</h2>
+          <a [routerLink]="['/categories', cat]"
+             class="text-sm font-medium text-indigo-600 hover:text-indigo-700 transition-colors duration-200">
+            View all →
+          </a>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+          @for (p of itemsOf(cat); track p.id) {
+            <app-product-card [product]="p" (add)="addToCart($event)"></app-product-card>
+          }
+        </div>
+      </section>
+    }
+
+    <!-- TRENDING -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-semibold mb-4">🔥 Trending</h2>
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+        @for (p of trending(); track p.id) {
+          <app-product-card [product]="p" (add)="addToCart($event)"></app-product-card>
+        }
+      </div>
+    </section>
+
+    <!-- NEW ARRIVALS -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-semibold mb-4">🆕 New Arrivals</h2>
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+        @for (p of newArrivals(); track p.id) {
+          <app-product-card [product]="p" (add)="addToCart($event)"></app-product-card>
+        }
+      </div>
+    </section>
+
+    <!-- BEST DEALS -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-semibold mb-4">💸 Best Deals</h2>
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+        @for (p of bestDeals(); track p.id) {
+          <app-product-card [product]="p" (add)="addToCart($event)"></app-product-card>
+        }
+      </div>
+    </section>
+
+    <!-- ALL CATEGORIES -->
+    <section class="mt-12">
+      <h3 class="text-lg font-semibold mb-3">Browse by category</h3>
+      <div class="flex flex-wrap gap-2">
+        @for (c of categories(); track c) {
+          <a [routerLink]="['/categories', c]"
+             class="rounded-full border border-gray-200 px-3 py-1.5 text-sm
+                    hover:border-indigo-400 hover:text-indigo-600 capitalize transition-colors duration-200">
+            {{ c.replace('-', ' ') }}
+          </a>
+        }
+      </div>
+    </section>
+  }
+</div>

@@ -1,9 +1,7 @@
 <nav class="relative bg-gray-800/50 after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-white/10">
   <div class="mx-auto max-w-7xl px-3 sm:px-5 lg:px-8">
-    <!-- fixed row height + true center align -->
     <div class="relative flex h-16 items-center">
-      
-      <!-- mobile menu button (kept absolute so it doesn't shift layout) -->
+      <!-- mobile menu button -->
       <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
         <button type="button" command="--toggle" commandfor="mobile-menu"
           class="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-white/5 hover:text-white focus:outline-2 focus:-outline-offset-1 focus:outline-indigo-500">
@@ -27,7 +25,7 @@
         </div>
       </div>
 
-      <!-- MIDDLE: links (no flex-1, no big ml) -->
+      <!-- MIDDLE: links -->
       <div class="hidden sm:flex items-center gap-4 sm:ml-4">
         <a routerLink="/home"
            class="rounded-md bg-gray-950/50 px-3 py-2 text-sm font-medium leading-none text-white">Home</a>
@@ -39,29 +37,80 @@
            class="rounded-md px-3 py-2 text-sm font-medium leading-none text-gray-300 hover:bg-white/5 hover:text-white">Calendar</a>
       </div>
 
-      <!-- RIGHT: actions (push to far right) -->
+      <!-- RIGHT: actions -->
       <div class="ml-auto flex items-center gap-2">
-        <button type="button" class="relative rounded-full p-1 text-gray-400 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500">
+        <!-- Cart trigger -->
+        <button (click)="openDrawer()" type="button"
+          class="relative rounded-full p-1 text-gray-400 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500">
           <span class="absolute -inset-1.5"></span>
-          <span class="sr-only">View notifications</span>
-          <svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
-          </svg>
+          <div class="flow-root">
+            <div class="group -m-2 flex items-center p-2">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"
+                   class="size-6 shrink-0 text-gray-400 group-hover:text-gray-500">
+                <path d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
+                      stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              <span class="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
+                {{ cartCount() }}
+              </span>
+              <span class="sr-only">items in cart, view bag</span>
+            </div>
+          </div>
         </button>
 
+        <!-- Account & Lists (single dropdown using el-dropdown/el-menu) -->
         <el-dropdown class="relative">
-          <button class="relative flex rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
-            <span class="absolute -inset-1.5"></span>
-            <span class="sr-only">Open user menu</span>
-            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=facearea&facepad=2&w=128&h=128&q=80"
-                 alt="" class="size-8 rounded-full bg-gray-800 outline -outline-offset-1 outline-white/10" />
+          <!-- Trigger -->
+          <button type="button"
+                  class="group text-left leading-tight px-3 py-2 rounded hover:bg-white/5 focus:outline-none">
+            <div class="text-[11px] text-gray-300">
+              Hello, {{ (auth.user()?.firstName || auth.user()?.username || auth.userName() || 'Sign in') }}
+            </div>
+            <div class="text-sm font-semibold text-gray-100 group-hover:text-white">
+              Account &amp; Lists
+              <i class="fa-solid fa-caret-down ml-1"></i>
+            </div>
           </button>
 
+          <!-- Popover -->
           <el-menu anchor="bottom end" popover
-                   class="w-48 origin-top-right rounded-md bg-gray-800 py-1 outline -outline-offset-1 outline-white/10 transition data-closed:scale-95 data-closed:opacity-0">
-            <a href="#" class="block px-4 py-2 text-sm text-gray-300 focus:bg-white/5">Your profile</a>
-            <a href="#" class="block px-4 py-2 text-sm text-gray-300 focus:bg-white/5">Settings</a>
-            <a href="#" class="block px-4 py-2 text-sm text-gray-300 focus:bg-white/5">Sign out</a>
+                   class="w-72 origin-top-right rounded-xl bg-gray-900/95 backdrop-blur p-2 outline -outline-offset-1 outline-white/10 shadow-xl transition data-closed:scale-95 data-closed:opacity-0">
+
+            <!-- Logged out -->
+            @if (!auth.isLoggedIn()) {
+              <div class="p-3">
+                <button (click)="goLogin()"
+                        class="w-full rounded-md bg-indigo-600 px-3 py-2 text-sm font-medium text-white hover:bg-indigo-500">
+                  Sign in
+                </button>
+                <p class="mt-2 text-xs text-gray-400">
+                  New customer?
+                  <a (click)="goRegister()" class="cursor-pointer text-indigo-300 hover:underline">Start here.</a>
+                </p>
+              </div>
+              <hr class="my-2 border-white/10">
+              <div class="grid grid-cols-2 gap-2 text-sm">
+                <a routerLink="/all-products" class="block rounded px-2 py-1 hover:bg-white/5">All Products</a>
+                <a routerLink="/categories" class="block rounded px-2 py-1 hover:bg-white/5">Browse Categories</a>
+              </div>
+            } @else {
+              <!-- Logged in -->
+              <div class="px-2 py-1 text-xs text-gray-400">
+                Hello, {{ (auth.user()?.firstName || auth.user()?.username || auth.userName() || 'User') }}
+              </div>
+              <hr class="my-2 border-white/10">
+              <div class="grid grid-cols-2 gap-2 text-sm">
+                <a routerLink="/categories" class="block rounded px-2 py-1 hover:bg-white/5">Your Lists</a>
+                <a routerLink="/all-products" class="block rounded px-2 py-1 hover:bg-white/5">Orders</a>
+                <a routerLink="/categories" class="block rounded px-2 py-1 hover:bg-white/5">Recommendations</a>
+                <a routerLink="/categories" class="block rounded px-2 py-1 hover:bg-white/5">Account</a>
+              </div>
+              <hr class="my-2 border-white/10">
+              <button (click)="logout()"
+                      class="w-full rounded-md border border-white/15 px-3 py-2 text-sm hover:bg-white/5">
+                Sign out
+              </button>
+            }
           </el-menu>
         </el-dropdown>
       </div>
@@ -78,4 +127,6 @@
     </div>
   </el-disclosure>
 </nav>
+
+<app-cart></app-cart>
 <router-outlet></router-outlet>
