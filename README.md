@@ -147,18 +147,5 @@ Add PNGs under `docs/screens/` and embed here when ready.
 - Deployment recipe (Vercel/Netlify); small analytics hooks
 
 
-## How to Review (for internship reviewers)
-
-- Skim the dark‑themed UI: consistent buttons, inputs, and nav states.
-- Confirm Angular 17 usage: standalone components, signals, `@if/@for`.
-- Inspect `CartService`: user‑scoped persistence + float‑safe currency.
-- Check `AuthInterceptor`/`RefreshInterceptor` and the guards.
-- Verify UX details: disabled checkout when empty/invalid, line totals, active tabs.
-
-If you want a quick technical walkthrough or a small screencast script, see `docs/` (add a short Loom/GIF link).
-
-
----
-
 If you have questions or want a deeper tour of any part of the codebase (auth flow, interceptors, cart signals, or styling), open an issue or ping me — happy to walk through the decisions.
 
