@@ -1,26 +1,33 @@
 <article
-  class="rounded-lg border bg-white p-4 shadow-sm transition hover:shadow-lg hover:scale-[1.02]">
+  class="rounded-lg border border-white/10 bg-gray-900/40 p-5 shadow-sm transition hover:shadow-lg hover:scale-[1.02]">
 
   <a [routerLink]="['/products', product.id]" class="block group">
-    <img [src]="product.thumbnail" [alt]="product.title"
-         class="h-40 w-full object-contain mb-3 transition-transform duration-200 group-hover:scale-105" />
-    <h3 class="text-sm font-medium text-gray-900 line-clamp-2 
-               group-hover:text-indigo-600 transition-colors"
+    <div class="mb-3 rounded-lg border border-white/10 bg-gray-800">
+      <img [src]="product.thumbnail" [alt]="product.title"
+           class="h-48 w-full object-contain transition-transform duration-200 group-hover:scale-105" />
+    </div>
+    <h3 class="text-base font-medium text-white line-clamp-2 
+               group-hover:text-indigo-400 transition-colors"
         title="{{ product.title }}">{{ product.title }}
     </h3>
   </a>
 
   <div class="mt-2 flex items-center justify-between">
     <div>
-      <p class="text-indigo-600 font-semibold">${{ product.price }}</p>
-      <p *ngIf="product.rating" class="text-xs text-gray-500">⭐ {{ product.rating }}</p>
-      <p *ngIf="product.discountPercentage" class="text-xs text-green-600">
-        -{{ product.discountPercentage }}%
-      </p>
+      <p class="text-indigo-400 font-semibold">${{ product.price }}</p>
+      <div class="flex items-center gap-2 text-xs text-gray-400">
+        @if (product.rating) {
+          <app-stars [rating]="product.rating"></app-stars>
+          <span>{{ product.rating | number:'1.1-1' }}</span>
+        }
+        @if (product.discountPercentage) {
+          <span class="text-green-400">-{{ product.discountPercentage }}%</span>
+        }
+      </div>
     </div>
     <button type="button"
             (click)="addToCart()"
-            class="rounded-md bg-indigo-600 px-3 py-1.5 text-sm text-white hover:bg-indigo-700 transition cursor-pointer">
+            class="rounded-md bg-indigo-600 px-3.5 py-2 text-sm text-white hover:bg-indigo-500 transition cursor-pointer">
       Add
     </button>
   </div>

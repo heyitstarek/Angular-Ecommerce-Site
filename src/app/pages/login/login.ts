@@ -26,6 +26,12 @@ export class Login {
     password: ['', [Validators.required]],
   });
 
+  constructor() {
+    // Prefill username if provided via query (?username=...)
+    const u = this.route.snapshot.queryParamMap.get('username');
+    if (u) this.form.patchValue({ username: u });
+  }
+
   submit() {
     if (this.form.invalid) return;
     this.loading.set(true); this.error.set(null);
@@ -34,7 +40,7 @@ export class Login {
       next: (res) => {
         // store tokens
         this.auth.setToken(res.accessToken);
-        this.auth.setRefreshToken(res.refreshToken);
+        if (res.refreshToken) this.auth.setRefreshToken(res.refreshToken);
 
         // fallback greeting immediately (typed username)
         this.auth.setUserName(this.form.value.username as string);

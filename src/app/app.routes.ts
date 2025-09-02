@@ -32,6 +32,7 @@ export const routes: Routes = [
       { path: 'categories/:cat', loadComponent: () => import('./pages/categories/categories').then(m => m.Categories) },
       { path: 'all-products',    loadComponent: () => import('./pages/all-products/all-products').then(m => m.AllProducts) },
       { path: 'products/:id',    loadComponent: () => import('./pages/product-detail/product-detail').then(m => m.ProductDetail) },
+      { path: 'checkout',        loadComponent: () => import('./pages/checkout/checkout').then(m => m.CheckoutPage) },
     ],
   },
 

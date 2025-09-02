@@ -2,6 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
+import { AuthService } from '../../core/services/auth.service';
 import { ApiService } from '../../core/services/api.service';
 
 @Component({
@@ -15,6 +16,7 @@ export class Register {
   private fb = inject(FormBuilder);
   private api = inject(ApiService);
   private router = inject(Router);
+  private auth = inject(AuthService);
 
   loading = signal(false);
   error = signal<string | null>(null);
@@ -32,13 +34,31 @@ export class Register {
     this.error.set(null);
     this.ok.set(false);
 
-    this.api.register(this.form.value as any).subscribe({
+    const { username, password, email } = this.form.value as any;
+    this.api.register({ username, password, email }).subscribe({
       next: () => {
-        this.ok.set(true);
-        setTimeout(() => this.router.navigateByUrl('/auth/login'), 600);
+        // Try immediate login using the same credentials (works if API supports it)
+        this.api.login({ username, password }).subscribe({
+          next: (res) => {
+            this.auth.setToken(res.accessToken);
+            if (res.refreshToken) this.auth.setRefreshToken(res.refreshToken);
+            this.auth.setUserName(username);
+            this.api.me().subscribe({
+              next: me => { this.auth.user.set(me); this.auth.setUserName(me.firstName || me.username); },
+              error: () => { /* ignore */ }
+            });
+            this.router.navigateByUrl('/');
+          },
+          error: () => {
+            // Fallback: show success and send to login with prefilled username
+            this.ok.set(true);
+            this.loading.set(false);
+            setTimeout(() => this.router.navigate(['/auth/login'], { queryParams: { username } }), 800);
+          }
+        });
       },
       error: () => {
-        this.error.set('Registration failed.'); // DummyJSON simulates the add; fields are not strictly validated
+        this.error.set('Registration failed.');
         this.loading.set(false);
       }
     });

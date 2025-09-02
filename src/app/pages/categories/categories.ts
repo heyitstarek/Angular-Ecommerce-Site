@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute } from '@angular/router';
 import { IProduct, ProductService } from '../../core/services/product.service';
@@ -10,6 +10,7 @@ import { ProductCard } from '../../shared/product-card/product-card';
   standalone: true,
   imports: [CommonModule, RouterModule, ProductCard],
   templateUrl: './categories.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Categories {
   private route = inject(ActivatedRoute);

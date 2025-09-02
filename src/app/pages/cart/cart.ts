@@ -9,12 +9,14 @@ import {
   inject 
 } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { Router } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { CartService } from '../../core/services/cart.service';
 
 @Component({
   selector: 'app-cart',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './cart.html',
   styleUrls: ['./cart.css'],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
@@ -31,7 +33,9 @@ export class Cart implements AfterViewInit, OnDestroy {
 
   private onClose = () => {
     if (this.isBrowser()) {
+      // Ensure both html and body scroll are restored
       document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
     }
   };
 
@@ -43,7 +47,8 @@ export class Cart implements AfterViewInit, OnDestroy {
   private onBackdropClick = (ev: MouseEvent) => {
     if (!this.isBrowser()) return;
     const dlg = this.drawerEl.nativeElement;
-    const panel = dlg.querySelector('.panel') as HTMLElement | null;
+    // Close only when clicking outside of the visible content panel
+    const panel = dlg.querySelector('el-dialog-panel') as HTMLElement | null;
     if (panel && !panel.contains(ev.target as Node)) {
       this.closeDrawer();
     }
@@ -73,15 +78,27 @@ export class Cart implements AfterViewInit, OnDestroy {
     if (!this.isBrowser()) return;
     const dlg = this.drawerEl?.nativeElement;
     if (!dlg || dlg.open) return;
-    document.documentElement.style.overflow = 'hidden'; // lock page scroll
+    // lock page scroll (set on both html and body for reliability)
+    document.documentElement.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
     try { dlg.showModal(); } catch {}
   }
 
   closeDrawer() {
     if (!this.isBrowser()) return;
     const dlg = this.drawerEl?.nativeElement;
-    if (dlg?.open) dlg.close(); // 'close' event will unlock scroll
+    if (dlg?.open) dlg.close();
+    // Also immediately restore scroll in case 'close' event is missed
+    document.documentElement.style.overflow = '';
+    document.body.style.overflow = '';
   }
 
   remove(id: number) { this.cartSvc.remove(id); }
+
+  private router = inject(Router);
+  goCheckout() {
+    if (this.cartSvc.count() === 0) return;
+    this.closeDrawer();
+    this.router.navigate(['/checkout']);
+  }
 }

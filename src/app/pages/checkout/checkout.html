@@ -1,0 +1,180 @@
+<div class="container mx-auto px-4 py-8">
+  <h1 class="text-2xl font-bold text-white mb-6">Checkout</h1>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- LEFT: form -->
+    <div class="lg:col-span-2 space-y-6">
+      <!-- Contact & Shipping -->
+      <section class="rounded-xl border border-white/10 bg-gray-900/40 p-5">
+        <h2 class="text-lg font-semibold text-white mb-4">Contact & Shipping</h2>
+        @if (submitted() && form.invalid) {
+          <div class="mb-3 rounded-md border border-red-500/30 bg-red-500/10 text-red-300 text-sm px-3 py-2">
+            Please complete all required fields before placing your order.
+          </div>
+        }
+        <div [formGroup]="form" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-sm text-gray-300 mb-1">Full Name <span class="text-red-400">*</span></label>
+            <input formControlName="name" type="text"
+                   [class.border-red-500]="submitted() && form.get('name')?.invalid"
+                   class="w-full rounded-lg border border-white/10 bg-gray-800 px-3 py-2 text-white outline-none focus:ring-2 focus:ring-indigo-500">
+            @if (form.get('name')?.invalid && (form.get('name')?.touched || submitted())) {
+              <p class="mt-1 text-xs text-red-400">Name is required.</p>
+            }
+          </div>
+          <div>
+            <label class="block text-sm text-gray-300 mb-1">Email <span class="text-red-400">*</span></label>
+            <input formControlName="email" type="email"
+                   [class.border-red-500]="submitted() && form.get('email')?.invalid"
+                   class="w-full rounded-lg border border-white/10 bg-gray-800 px-3 py-2 text-white outline-none focus:ring-2 focus:ring-indigo-500">
+            @if (form.get('email')?.invalid && (form.get('email')?.touched || submitted())) {
+              <p class="mt-1 text-xs text-red-400">Enter a valid email.</p>
+            }
+          </div>
+          <div>
+            <label class="block text-sm text-gray-300 mb-1">Phone</label>
+            <input formControlName="phone" type="tel"
+                   class="w-full rounded-lg border border-white/10 bg-gray-800 px-3 py-2 text-white outline-none focus:ring-2 focus:ring-indigo-500">
+          </div>
+          <div>
+            <label class="block text-sm text-gray-300 mb-1">Country</label>
+            <input formControlName="country" type="text"
+                   class="w-full rounded-lg border border-white/10 bg-gray-800 px-3 py-2 text-white outline-none focus:ring-2 focus:ring-indigo-500">
+          </div>
+          <div class="sm:col-span-2">
+            <label class="block text-sm text-gray-300 mb-1">Address <span class="text-red-400">*</span></label>
+            <input formControlName="address" type="text"
+                   [class.border-red-500]="submitted() && form.get('address')?.invalid"
+                   class="w-full rounded-lg border border-white/10 bg-gray-800 px-3 py-2 text-white outline-none focus:ring-2 focus:ring-indigo-500">
+            @if (form.get('address')?.invalid && (form.get('address')?.touched || submitted())) {
+              <p class="mt-1 text-xs text-red-400">Address is required.</p>
+            }
+          </div>
+          <div>
+            <label class="block text-sm text-gray-300 mb-1">City</label>
+            <input formControlName="city" type="text"
+                   class="w-full rounded-lg border border-white/10 bg-gray-800 px-3 py-2 text-white outline-none focus:ring-2 focus:ring-indigo-500">
+          </div>
+          <div>
+            <label class="block text-sm text-gray-300 mb-1">State</label>
+            <input formControlName="state" type="text"
+                   class="w-full rounded-lg border border-white/10 bg-gray-800 px-3 py-2 text-white outline-none focus:ring-2 focus:ring-indigo-500">
+          </div>
+          <div>
+            <label class="block text-sm text-gray-300 mb-1">Postal Code</label>
+            <input formControlName="zip" type="text"
+                   class="w-full rounded-lg border border-white/10 bg-gray-800 px-3 py-2 text-white outline-none focus:ring-2 focus:ring-indigo-500">
+          </div>
+        </div>
+      </section>
+
+      <!-- Delivery -->
+      <section class="rounded-xl border border-white/10 bg-gray-900/40 p-5">
+        <h2 class="text-lg font-semibold text-white mb-3">Delivery</h2>
+        <div class="grid sm:grid-cols-2 gap-3 text-sm">
+          <label class="flex items-center gap-3 rounded-lg border border-white/10 bg-gray-800 p-3 cursor-pointer">
+            <input type="radio" class="accent-indigo-500" [checked]="delivery() === 'standard'" (change)="setDelivery('standard')">
+            <div>
+              <div class="text-white font-medium">Standard</div>
+              <div class="text-gray-400">3–5 business days — Free</div>
+            </div>
+          </label>
+          <label class="flex items-center gap-3 rounded-lg border border-white/10 bg-gray-800 p-3 cursor-pointer">
+            <input type="radio" class="accent-indigo-500" [checked]="delivery() === 'express'" (change)="setDelivery('express')">
+            <div>
+              <div class="text-white font-medium">Express</div>
+              <div class="text-gray-400">1–2 business days — $9.99</div>
+            </div>
+          </label>
+        </div>
+      </section>
+
+      <!-- Payment (placeholder) -->
+      <section class="rounded-xl border border-white/10 bg-gray-900/40 p-5" [formGroup]="form">
+        <h2 class="text-lg font-semibold text-white mb-3">Payment</h2>
+        <p class="text-sm text-gray-400">Demo checkout — enter any values.</p>
+        <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-sm text-gray-300 mb-1">Cardholder Name <span class="text-red-400">*</span></label>
+            <input formControlName="cardName" type="text"
+                   [class.border-red-500]="submitted() && form.get('cardName')?.invalid"
+                   class="w-full rounded-lg border border-white/10 bg-gray-800 px-3 py-2 text-white outline-none focus:ring-2 focus:ring-indigo-500">
+            @if (form.get('cardName')?.invalid && (form.get('cardName')?.touched || submitted())) {
+              <p class="mt-1 text-xs text-red-400">Cardholder name is required.</p>
+            }
+          </div>
+          <div>
+            <label class="block text-sm text-gray-300 mb-1">Card Number <span class="text-red-400">*</span></label>
+            <input formControlName="cardNumber" type="text" inputmode="numeric" placeholder="4242 4242 4242 4242"
+                   [class.border-red-500]="submitted() && form.get('cardNumber')?.invalid"
+                   class="w-full rounded-lg border border-white/10 bg-gray-800 px-3 py-2 text-white outline-none focus:ring-2 focus:ring-indigo-500">
+            @if (form.get('cardNumber')?.invalid && (form.get('cardNumber')?.touched || submitted())) {
+              <p class="mt-1 text-xs text-red-400">Enter a valid card number.</p>
+            }
+          </div>
+          <div>
+            <label class="block text-sm text-gray-300 mb-1">Expiry <span class="text-red-400">*</span></label>
+            <input formControlName="cardExpiry" type="text" placeholder="MM/YY"
+                   [class.border-red-500]="submitted() && form.get('cardExpiry')?.invalid"
+                   class="w-full rounded-lg border border-white/10 bg-gray-800 px-3 py-2 text-white outline-none focus:ring-2 focus:ring-indigo-500">
+            @if (form.get('cardExpiry')?.invalid && (form.get('cardExpiry')?.touched || submitted())) {
+              <p class="mt-1 text-xs text-red-400">Use format MM/YY.</p>
+            }
+          </div>
+          <div>
+            <label class="block text-sm text-gray-300 mb-1">CVC <span class="text-red-400">*</span></label>
+            <input formControlName="cardCvc" type="text" inputmode="numeric" placeholder="123"
+                   [class.border-red-500]="submitted() && form.get('cardCvc')?.invalid"
+                   class="w-full rounded-lg border border-white/10 bg-gray-800 px-3 py-2 text-white outline-none focus:ring-2 focus:ring-indigo-500">
+            @if (form.get('cardCvc')?.invalid && (form.get('cardCvc')?.touched || submitted())) {
+              <p class="mt-1 text-xs text-red-400">3–4 digits.</p>
+            }
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- RIGHT: order summary -->
+    <aside class="space-y-4">
+      <section class="rounded-xl border border-white/10 bg-gray-900/40 p-5">
+        <h2 class="text-lg font-semibold text-white mb-3">Order Summary</h2>
+        <ul class="divide-y divide-white/10">
+          @for (item of cartSvc.cart(); track item.id) {
+            <li class="py-3 flex items-center gap-3">
+              <img [src]="item.image" [alt]="item.title" class="h-12 w-12 rounded border border-white/10 bg-gray-800 object-cover">
+              <div class="flex-1 min-w-0">
+                <p class="text-sm text-white truncate" title="{{ item.title }}">{{ item.title }}</p>
+                <p class="text-xs text-gray-400">Qty {{ item.quantity }}</p>
+              </div>
+              <div class="text-sm text-gray-200">{{ (item.price * item.quantity) | currency:'USD':'symbol':'1.2-2' }}</div>
+            </li>
+          }
+        </ul>
+        <div class="mt-4 space-y-1 text-sm">
+          <div class="flex justify-between text-gray-300">
+            <span>Subtotal</span>
+            <span>{{ cartSvc.subtotal() | currency:'USD':'symbol':'1.2-2' }}</span>
+          </div>
+          <div class="flex justify-between text-gray-400">
+            <span>Shipping</span>
+            <span>@if (delivery() === 'express') { {{ 9.99 | currency:'USD':'symbol':'1.2-2' }} } @else { Free }</span>
+          </div>
+          <div class="flex justify-between text-gray-400">
+            <span>Tax</span>
+            <span>—</span>
+          </div>
+          <hr class="my-2 border-white/10">
+          <div class="flex justify-between text-white font-medium">
+            <span>Total</span>
+            <span>{{ total() | currency:'USD':'symbol':'1.2-2' }}</span>
+          </div>
+        </div>
+        <button type="button" (click)="placeOrder()" [disabled]="form.invalid || cartSvc.count() === 0"
+                class="mt-4 w-full rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500 disabled:opacity-60">
+          Place Order
+        </button>
+        @if (ok()) { <p class="text-sm text-green-400 mt-2">Order placed! Thank you.</p> }
+      </section>
+    </aside>
+  </div>
+</div>

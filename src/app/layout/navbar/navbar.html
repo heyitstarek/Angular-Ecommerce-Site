@@ -27,35 +27,33 @@
 
       <!-- MIDDLE: links -->
       <div class="hidden sm:flex items-center gap-4 sm:ml-4">
-        <a routerLink="/home"
+        <a routerLink="/home" routerLinkActive="bg-white/5 text-white" [attr.aria-current]="null"
            class="rounded-md bg-gray-950/50 px-3 py-2 text-sm font-medium leading-none text-white">Home</a>
-        <a routerLink="/categories"
+        <a routerLink="/categories" routerLinkActive="bg-white/5 text-white" [attr.aria-current]="null"
            class="rounded-md px-3 py-2 text-sm font-medium leading-none text-gray-300 hover:bg-white/5 hover:text-white">Categories</a>
-        <a href="#"
-           class="rounded-md px-3 py-2 text-sm font-medium leading-none text-gray-300 hover:bg-white/5 hover:text-white">Projects</a>
-        <a href="#"
-           class="rounded-md px-3 py-2 text-sm font-medium leading-none text-gray-300 hover:bg-white/5 hover:text-white">Calendar</a>
+        <a routerLink="/all-products"
+           class="rounded-md px-3 py-2 text-sm font-medium leading-none text-gray-300 hover:bg-white/5 hover:text-white">All Products</a>
+        <a routerLink="/all-products" [queryParams]="{ view: 'deals' }"
+           class="rounded-md px-3 py-2 text-sm font-medium leading-none text-gray-300 hover:bg-white/5 hover:text-white">Deals</a>
       </div>
 
       <!-- RIGHT: actions -->
       <div class="ml-auto flex items-center gap-2">
         <!-- Cart trigger -->
         <button (click)="openDrawer()" type="button"
-          class="relative rounded-full p-1 text-gray-400 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500">
+          class="relative rounded-full p-2 text-gray-300 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500">
           <span class="absolute -inset-1.5"></span>
-          <div class="flow-root">
-            <div class="group -m-2 flex items-center p-2">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"
-                   class="size-6 shrink-0 text-gray-400 group-hover:text-gray-500">
-                <path d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
-                      stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
-              <span class="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
-                {{ cartCount() }}
-              </span>
-              <span class="sr-only">items in cart, view bag</span>
-            </div>
-          </div>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"
+               class="size-6 text-gray-300 hover:text-white">
+            <path d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
+                  stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          @if (cartCount() > 0) {
+            <span class="absolute -top-1 -right-1 min-w-5 h-5 px-1.5 grid place-items-center rounded-full bg-indigo-600 text-white text-[10px] font-semibold leading-none border border-gray-900 shadow-md">
+              {{ cartCount() > 99 ? '99+' : cartCount() }}
+            </span>
+          }
+          <span class="sr-only">items in cart, view bag</span>
         </button>
 
         <!-- Account & Lists (single dropdown using el-dropdown/el-menu) -->
@@ -122,8 +120,8 @@
     <div class="space-y-1 px-2 pt-2 pb-3">
       <a routerLink="/home" class="block rounded-md bg-gray-950/50 px-3 py-2 text-base font-medium text-white">Home</a>
       <a routerLink="/categories" class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-white/5 hover:text-white">Categories</a>
-      <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-white/5 hover:text-white">Projects</a>
-      <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-white/5 hover:text-white">Calendar</a>
+      <a routerLink="/all-products" class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-white/5 hover:text-white">All Products</a>
+      <a routerLink="/all-products" [queryParams]="{ view: 'deals' }" class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-white/5 hover:text-white">Deals</a>
     </div>
   </el-disclosure>
 </nav>

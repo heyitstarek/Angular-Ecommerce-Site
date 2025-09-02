@@ -29,21 +29,23 @@
 
     <!-- FEATURED CATEGORIES -->
     @for (cat of featured(); track cat) {
-      <section class="mb-12">
-        <div class="mb-4 flex items-center justify-between">
-          <h2 class="text-2xl font-semibold capitalize">{{ cat.replace('-', ' ') }}</h2>
-          <a [routerLink]="['/categories', cat]"
-             class="text-sm font-medium text-indigo-600 hover:text-indigo-700 transition-colors duration-200">
-            View all →
-          </a>
-        </div>
+      @if (itemsOf(cat).length) {
+        <section class="mb-12">
+          <div class="mb-4 flex items-center justify-between">
+            <h2 class="text-2xl font-semibold">{{ formatCategory(cat) }}</h2>
+            <a [routerLink]="['/categories', cat]"
+              class="text-sm font-medium text-indigo-300 hover:text-white transition-colors duration-200">
+              View all →
+            </a>
+          </div>
 
-        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
-          @for (p of itemsOf(cat); track p.id) {
-            <app-product-card [product]="p" (add)="addToCart($event)"></app-product-card>
-          }
-        </div>
-      </section>
+          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+            @for (p of itemsOf(cat); track p.id) {
+              <app-product-card [product]="p" (add)="addToCart($event)"></app-product-card>
+            }
+          </div>
+        </section>
+      }
     }
 
     <!-- TRENDING -->
